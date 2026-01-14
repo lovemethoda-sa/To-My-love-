@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Proposal</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    background:black;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    font-family:'Pacifico', cursive;
+}
+
+.container{
+    text-align:center;
+    color:white;
+}
+
+/* QUESTION TEXT */
+.question{
+    font-size:28px;
+    color:#ff69b4;
+    margin-bottom:70px;   /* ✅ GAP FIXED */
+    transition:0.5s;
+}
+
+/* HEART */
+.heart{
+    width:160px;
+    height:160px;
+    background:#ff2f92;
+    position:relative;
+    margin:0 auto 50px;   /* ✅ GAP FIXED */
+    transform:rotate(-45deg);
+    animation:beat 1s infinite;
+    box-shadow:0 0 35px #ff69b4;
+}
+
+.heart::before,
+.heart::after{
+    content:"";
+    width:160px;
+    height:160px;
+    background:#ff2f92;
+    border-radius:50%;
+    position:absolute;
+}
+.heart::before{top:-80px;left:0;}
+.heart::after{left:80px;top:0;}
+
+@keyframes beat{
+    0%,100%{transform:rotate(-45deg) scale(1);}
+    50%{transform:rotate(-45deg) scale(1.15);}
+}
+
+/* BUTTONS */
+.buttons{
+    display:flex;
+    justify-content:center;
+    gap:40px;
+}
+
+button{
+    padding:12px 28px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    font-family:'Pacifico', cursive;
+}
+
+#yes{background:#ff2f92;color:white;}
+#no{background:white;color:black;}
+
+/* LOVE TEXT (SINGLE LINE) */
+.love-text{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:36px;
+    color:#ff69b4;
+    opacity:0;
+    animation:float 3s infinite;
+    white-space:nowrap;   /* ✅ ONE LINE ONLY */
+}
+
+@keyframes float{
+    0%{transform:translate(-50%,-50%);}
+    50%{transform:translate(-50%,-65%);}
+    100%{transform:translate(-50%,-50%);}
+}
+
+/* FALLING HEARTS */
+.falling-heart{
+    position:fixed;
+    top:-20px;
+    font-size:22px;
+    color:#ff69b4;
+    animation:fall linear forwards;
+}
+@keyframes fall{
+    to{transform:translateY(110vh);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="question" id="question">Miss Will You Be Mine?</div>
+
+    <div class="heart"></div>
+
+    <div class="buttons">
+        <button id="yes">Yes</button>
+        <button id="no">No</button>
+    </div>
+</div>
+
+<!-- ✅ ONE LINE LOVE TEXT -->
+<div class="love-text" id="loveText">I Love You Miss</div>
+
+<!-- MUSIC -->
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/10/14/audio_1f1b9d2e64.mp3" type="audio/mp3">
+</audio>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const question = document.getElementById("question");
+const loveText = document.getElementById("loveText");
+const music = document.getElementById("music");
+
+/* NO BUTTON MOVE */
+function moveNo(){
+    noBtn.style.transform =
+      `translate(${Math.random()*200-100}px,${Math.random()*200-100}px)`;
+}
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+/* YES CLICK */
+yesBtn.addEventListener("click", ()=>{
+    if(document.documentElement.requestFullscreen){
+        document.documentElement.requestFullscreen();
+    }
+    question.style.display="none";
+    loveText.style.opacity="1";
+    music.play();
+    startHearts();
+});
+
+/* FALLING HEARTS */
+function startHearts(){
+    setInterval(()=>{
+        const h=document.createElement("div");
+        h.className="falling-heart";
+        h.innerHTML="❤";
+        h.style.left=Math.random()*100+"vw";
+        h.style.animationDuration=(Math.random()*3+3)+"s";
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),6000);
+    },300);
+}
+</script>
+
+</body>
+</html>
